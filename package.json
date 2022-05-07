@@ -1,0 +1,30 @@
+{
+  "name": "in4matx285-reversi",
+  "version": "0.0.1",
+  "description": "A web version of the game Reversi for UCI, MHCID's IN4MATX285 Interactive Technology Studio course",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cynyeung/IN4MATX285-reversi.git"
+  },
+  "keywords": [
+    "reversi",
+    "uci",
+    "mhcid",
+    "technology"
+  ],
+  "author": "Cynthia Yeung",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/cynyeung/IN4MATX285-reversi/issues"
+  },
+  "homepage": "https://github.com/cynyeung/IN4MATX285-reversi#readme",
+  "dependencies": {
+    "node-static": "^0.7.11",
+    "socket.io": "^4.5.0"
+  }
+}
