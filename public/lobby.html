@@ -11,6 +11,15 @@
         .headerrow { 
             background-color: #DEE3A8;
         }
+        .join_room_response {
+            padding: 5px 10px;
+            background-color: #FEFAE0;
+            font-style: italic;
+        }
+        .chat_message {
+            font-size: 125%;
+            color: #132a13;
+        }
     </style>
 
     <title>Reversi: Lobby | Cynthia Yeung, IN4MATX285</title>
@@ -24,7 +33,26 @@
         </div>
         <div class="row m-3">
             <div class="col">
-                <h4>Messages</h3>
+                <div class="row align-items-center justify-content-center m-3">
+                    <div class="col-8">
+                        <div class="input-group">
+                            <input 
+                                id="chatMessage" 
+                                class="form-control text-nowrap"
+                                type="text" class="form-control text-nowrap" 
+                                placeholder="Enter your message here"
+                                aria-label="Enter your message to send to the chat room" />
+                            <button
+                                id="chatButton" 
+                                class="btn btn-primary text-nowrap"
+                                type="submit"
+                                onclick="sendChatMessage()">
+                                    Send
+                              </button>
+                        </div>
+                    </div>
+                </div>
+                <h4>Messages</h4>
                     <div id="messages"></div>
             </div>
         </div>
