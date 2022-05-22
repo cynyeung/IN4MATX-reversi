@@ -11,7 +11,7 @@ let directory = __dirname + '/public';
 // If we aren't on Heroku, then we need to adjust our port and directory
 if((typeof port == 'undefined') || (port === null)) {
     port = 8080;
-    direction = './public';
+    directory = './public';
 }
 
 // Setup our static file web server to deliver files from the filesystem
@@ -23,13 +23,17 @@ let app = http.createServer(
             function() {
                 file.serve(request,response);
             }
-        ).resume()
+        ).resume();
     }
 ).listen(port);
 
 console.log('The server is running on port:8080');
 
 // Set up the web socket server
+
+// Set up a registry of player information and their socket ids
+let players = [];
+
 const { Server } = require('socket.io');
 const io = new Server(app);
 
@@ -44,9 +48,6 @@ io.on('connection', (socket) => {
     }
 
     serverLog('a page connected to the server: ' + socket.id);
-    socket.on('disconnect', () => {
-        serverLog('a page disconnected from the server: ' + socket.id);
-    });
 
     /* join_room command handler
         expected payload:
@@ -55,24 +56,24 @@ io.on('connection', (socket) => {
             'username': the name of the user joining the room
         }
     */
-    /* join_room_response 
+    /* join_room_response  
         {
             'result': 'success',
             'room': the room that was joined,
             'username': the user that joined the room,
             'count': the number of users in the chat room
+            'socket_id': the socket of the user that just joined the room
         }
         or
         {
             'result': 'fail',
             'message': the reason for failure
-        }
-    
+        } 
     */
-
-    socket.on('join_room', (payload) => {
+ 
+        socket.on('join_room', (payload) => {
         serverLog('Server received a command', '\'join_room\'', JSON.stringify(payload));
-        // Check that the data coming from the client is good
+       // Check that the data coming from the client is good
         if ((typeof payload == 'undefined') || (payload === null)) {
             response = {};
             response.result = 'fail';
@@ -103,9 +104,8 @@ io.on('connection', (socket) => {
         // Handle the command
         socket.join(room);
 
-        //Make sure the client was put in the room
+        // Make sure the client was put in the room
         io.in(room).fetchSockets().then((sockets) => {
-            serverLog('There are ' + sockets.length + ' clients in the room, ' + room);
             // Sockets didn't join the room
             if ((typeof sockets == 'undefined') || (sockets === null) || !sockets.includes(socket)) {
                 response = {};
@@ -116,18 +116,43 @@ io.on('connection', (socket) => {
             }
             // Socket did join room
             else {
-                response = {};
-                response.result = 'success';
-                response.room = room;
-                response.username = username;
-                response.count = sockets.length;
+                players[socket.id] = {
+                    username: username,
+                    room: room
+                }
+                // Announce to everyone that is in the room, who else is in the room
+                for (const member of sockets) {
+                    response = {
+                        result: 'success',
+                        socket_id: member.id,
+                        room: players[member.id].room,
+                        username: players[member.id].username,
+                        count: sockets.length
+                    }
 
-                // Tell everyone that a new user has joined the chat room
-                io.of('/').to(room).emit('join_room_response', response);
-                serverLog('join_room succeeded', JSON.stringify(response));
+                    // Tell everyone that a new user has joined the chat room
+                    io.of('/').to(room).emit('join_room_response', response);
+                    serverLog('join_room_succeeded', JSON.stringify(response));
+                }
+            };
+        });
+
+        socket.on('disconnect', () => {
+            serverLog('a page disconnected from the server: ' + socket.id);
+            if((typeof players[socket.id] != 'undefined') && (players[socket.id] != null)) {
+                let payload = {
+                    username: players[socket.id].username,
+                    room: players[socket.id].room,
+                    count: Object.keys(players).length - 1,
+                    socket_id: socket.id
+                };
+                let room = players[socket.id].room;
+                delete players[socket.id];
+                // Tell everyone who left the room
+                io.of("/").to(room).emit('player_disconnected', payload);
+                serverLog('player_disconnected_succeeded', JSON.stringify(payload));
             }
         });
-    });
 
 
     /* send_chat_message command handler
@@ -149,7 +174,6 @@ io.on('connection', (socket) => {
             'result': 'fail',
             'message': the reason for failure
         }
-    
     */
 
         socket.on('send_chat_message', (payload) => {
@@ -190,7 +214,7 @@ io.on('connection', (socket) => {
                 serverLog('send_chat_message_command failed', JSON.stringify(response));
                 return;
             }
-    
+
             // Handle the command
             let response = {};
             response.result = 'success';
@@ -202,4 +226,5 @@ io.on('connection', (socket) => {
             io.of('/').to(room).emit('send_chat_message_response', response);
             serverLog('send_chat_message command succeeded', JSON.stringify(response));
         });
+    });
 });
