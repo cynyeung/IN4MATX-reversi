@@ -7,24 +7,84 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
+        html, body {
+            height: 100%;
+            font-size: 24px !important;
+        }
+        body { 
+            background-color: #90A955;
+            background-image: url("./assets/images/background.svg");
+            background-position: center bottom -16px;
+            background-repeat: repeat-x;
+            padding-top: 0.5rem;
+            font-family: 'VT323', monospace;
+        }
         .headerrow { 
             background-color: #DEE3A8;
+            box-shadow: 16px 0 #DEE3A8, -16px 0 #DEE3A8, 0 -16px #DEE3A8, 0 16px #DEE3A8, 4px 0 0 8px #DEE3A8, -4px 0 0 8px #DEE3A8, 0 -4px 0 8px #DEE3A8, 0 4px 0 8px #DEE3A8, 20px 0 #132A13, -20px 0 #132A13, 0 -20px #132A13, 0 20px #132A13, 0 0 0 12px #132A13, 0 8px 0 8px #132A13, 0 -8px 0 8px #132A13, 8px 0 0 8px #132A13, -8px 0 0 8px #132A13;
+            margin: 2rem auto !important;
+        }
+        a {
+            color:#DEE3A8;
+            text-decoration: none;
+        }
+        a:hover {
+            color:#DEE3A8;
+            text-decoration: underline;
+        }
+        #aboutCopy {
+            margin-top: 1rem;
+            height: 50vh;
+            overflow: scroll;
         }
     </style>
 
     <title>Reversi: About | Cynthia Yeung, IN4MATX285</title>
   </head>
   <body>
-    <div class="container-fluid">
+    <div class="container">
         <div class="row m-3 headerrow">
             <div class="col text-center">
                 <h3>About</h3>
             </div>
         </div>
         <div class="row m-3">
-            <div class="col text-center">
-                <p>This is a game to demonstrate how web applications work.</p>
+            <div id="aboutCopy" class="col text-center">
+                <p style="display: none;">
+                    Reversi is a strategy based game for two players, played on an 8×8 uncheckered board.
+                    Players take alternating turns placing their assigned color of light or dark game pieces called disks or tokens on the board. 
+                    During a player's turn, the objective is to capture as many of your opponent's tokens through a variety of directional legal moves between two of the active player's tokens.
+                    The player with the most tokens on the board at the end of the last playable move wins the game.
+                </p>
+                <p>
+                    This digital version of the game Reversi is a node.js project using HTML, CSS, and jQuery. The project source code is hosted on <a href="https://github.com/cynyeung/IN4MATX285-reversi" target="_blank">Github</a> and the application is deployed on Heroku.
+                    This application utilizes Bootstrap, a CSS Framework for its responsive layout and components such as buttons and progress bar. This project also uses Socket.io, a Javascript library that enables real-time communication between the web client and server. 
+                    This is demonstrated with the player connections in the game lobby, through the real-time messaging feature of the application, and the live play of tokens on the game board.
+                </p>
+                <p>
+                    For the design approach, it is a unique stylistic choice loosely based around an 8-bit aesthetic. A custom font called VT323 from Google Fonts was selected to pair with the visual aesthetic of the game. Custom CSS was written in addition to the Bootstrap framework
+                    to style the game cohesively to the design intentions such as background images and consistent visual components across the pages.
+                </p>
+                <p>
+                    Future iterations of this game could revisit the use of pngs for the tokens and alternatively use SVGs and CSS animations for the graphical elements. 
+                    This web application could also review and build a more refined and robust mobile experience for the web application—Specifically as it relates to the hover state or game board hints of playable moves.
+                    Lastly, all the colors used throughout the game should be verified as WCAG compliant for web accessiblity.
+                </p>
+                <p>
+                    Regarding the scalability and maintanence of the source code, this project could use a templating language such as Handlebars to DRY up semantic and structural code. 
+                    A reusable global project stylesheet could also be introduced to help maintain CSS style consistency across the pages of the web application.
+                </p>
+                <p>
+                    For additions, this version of the game could be a more immersive experience by introducing sound design to the animations of the tokens.
+                </p>
+                <p>
+                    Code is built using a <a href="https://www.youtube.com/watch?v=HW_RmEfmwQY&list=PLix7MmR3doRoEJj8wIqXy_byOcGZ-ZoP7" target="_blank">code along series on Youtube uploaded by Professor Don Patterson.</a>
+                     Application programmed and 8-bit graphic assets designed by Cynthia Yeung to demonstrate how web applications work for UCI's MHCID IN4MATX285, Interactive Technology Studio course. 
+                 </p>
             </div>
         </div>
     </div>
